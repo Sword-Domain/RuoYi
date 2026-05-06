@@ -202,6 +202,48 @@
                 <version>${ruoyi.version}</version>
             </dependency>
 
+            <!-- ERP基础模块 -->
+            <dependency>
+                <groupId>com.ruoyi</groupId>
+                <artifactId>erp-base</artifactId>
+                <version>${ruoyi.version}</version>
+            </dependency>
+
+            <!-- ERP生产计划模块 -->
+            <dependency>
+                <groupId>com.ruoyi</groupId>
+                <artifactId>erp-production</artifactId>
+                <version>${ruoyi.version}</version>
+            </dependency>
+
+            <!-- ERP采购模块 -->
+            <dependency>
+                <groupId>com.ruoyi</groupId>
+                <artifactId>erp-purchase</artifactId>
+                <version>${ruoyi.version}</version>
+            </dependency>
+
+            <!-- ERP销售模块 -->
+            <dependency>
+                <groupId>com.ruoyi</groupId>
+                <artifactId>erp-sales</artifactId>
+                <version>${ruoyi.version}</version>
+            </dependency>
+
+            <!-- ERP库存模块 -->
+            <dependency>
+                <groupId>com.ruoyi</groupId>
+                <artifactId>erp-inventory</artifactId>
+                <version>${ruoyi.version}</version>
+            </dependency>
+
+            <!-- ERP财务模块 -->
+            <dependency>
+                <groupId>com.ruoyi</groupId>
+                <artifactId>erp-finance</artifactId>
+                <version>${ruoyi.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
@@ -212,6 +254,12 @@
         <module>ruoyi-quartz</module>
         <module>ruoyi-generator</module>
         <module>ruoyi-common</module>
+        <module>erp-base</module>
+        <module>erp-production</module>
+        <module>erp-purchase</module>
+        <module>erp-sales</module>
+        <module>erp-inventory</module>
+        <module>erp-finance</module>
     </modules>
     <packaging>pom</packaging>
 

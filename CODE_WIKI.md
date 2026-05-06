@@ -843,3 +843,221 @@ public List<SysUser> selectUserList(SysUser user) { ... }
 @PostMapping("/submit")
 public AjaxResult submit() { ... }
 ```
+
+---
+
+## ERP系统扩展模块
+
+### 模块结构
+
+```
+erp-base/                    # ERP基础资料模块
+├── pom.xml
+├── src/main/java/com/ruoyi/erp/base/
+│   ├── domain/
+│   │   ├── ErpMaterial.java          # 物料主数据
+│   │   ├── ErpSupplier.java          # 供应商
+│   │   ├── ErpCustomer.java          # 客户
+│   │   └── ErpWarehouse.java         # 仓库
+│   ├── mapper/
+│   │   ├── ErpMaterialMapper.java
+│   │   ├── ErpSupplierMapper.java
+│   │   ├── ErpCustomerMapper.java
+│   │   └── ErpWarehouseMapper.java
+│   ├── service/
+│   │   ├── IErpMaterialService.java
+│   │   ├── IErpSupplierService.java
+│   │   ├── IErpCustomerService.java
+│   │   ├── IErpWarehouseService.java
+│   │   └── impl/
+│   │       ├── ErpMaterialServiceImpl.java
+│   │       ├── ErpSupplierServiceImpl.java
+│   │       ├── ErpCustomerServiceImpl.java
+│   │       └── ErpWarehouseServiceImpl.java
+│   └── controller/
+│       ├── ErpMaterialController.java
+│       ├── ErpSupplierController.java
+│       ├── ErpCustomerController.java
+│       └── ErpWarehouseController.java
+└── src/main/resources/mapper/erp/base/
+
+erp-production/              # ERP生产计划模块
+├── pom.xml
+├── src/main/java/com/ruoyi/erp/production/
+│   ├── domain/
+│   │   ├── ErpBom.java               # BOM主表
+│   │   ├── ErpBomItem.java           # BOM明细
+│   │   ├── ErpWorkCenter.java        # 工作中心
+│   │   ├── ErpProcess.java           # 工序定义
+│   │   ├── ErpProductionOrder.java    # 生产订单
+│   │   ├── ErpProductionOrderItem.java # 生产订单明细
+│   │   ├── ErpMps.java                # 主生产计划
+│   │   ├── ErpMrp.java                # MRP记录
+│   │   ├── ErpMrpSuggestion.java      # MRP建议
+│   │   └── ErpWorkReport.java        # 报工记录
+│   ├── mapper/
+│   │   ├── ErpBomMapper.java
+│   │   ├── ErpProductionOrderMapper.java
+│   │   └── ErpMrpSuggestionMapper.java
+│   ├── service/
+│   │   ├── IErpBomService.java
+│   │   ├── IErpProductionOrderService.java
+│   │   ├── IErpMrpService.java
+│   │   └── impl/
+│   │       ├── ErpBomServiceImpl.java
+│   │       ├── ErpProductionOrderServiceImpl.java
+│   │       └── ErpMrpServiceImpl.java
+│   ├── controller/
+│   │   ├── ErpBomController.java
+│   │   ├── ErpProductionOrderController.java
+│   │   └── ErpMrpController.java
+│   └── util/
+│       └── MrpCalculator.java         # MRP运算引擎
+└── src/main/resources/mapper/erp/production/
+```
+
+### 核心功能说明
+
+#### 1. 基础资料模块 (erp-base)
+
+| 功能 | 说明 | API路径 |
+|------|------|---------|
+| 物料管理 | 物料主数据维护（编码、名称、规格、价格、库存上下限等） | `/erp/base/material/*` |
+| 供应商管理 | 供应商信息维护（联系人、银行账户、信用等级等） | `/erp/base/supplier/*` |
+| 客户管理 | 客户信息维护（联系人、银行账户、信用额度等） | `/erp/base/customer/*` |
+| 仓库管理 | 仓库信息维护（默认仓库、仓库类型等） | `/erp/base/warehouse/*` |
+
+#### 2. 生产计划模块 (erp-production)
+
+| 功能 | 说明 | API路径 |
+|------|------|---------|
+| BOM管理 | 物料清单维护，支持多层级BOM、BOM版本管理 | `/erp/production/bom/*` |
+| 工艺路线 | 工序定义、工作中心管理 | `/erp/production/process/*` |
+| 主生产计划(MPS) | 主生产计划管理 | `/erp/production/mps/*` |
+| 物料需求计划(MRP) | MRP运算引擎，自动计算物料需求 | `/erp/production/mrp/*` |
+| 生产订单 | 生产订单的创建、审批、下达、关闭 | `/erp/production/order/*` |
+| 报工管理 | 工序报工、工时统计 | `/erp/production/report/*` |
+
+### MRP运算引擎
+
+核心类: [MrpCalculator.java](file:///workspace/erp-production/src/main/java/com/ruoyi/erp/production/util/MrpCalculator.java)
+
+**MRP运算流程**:
+
+```
+1. 收集需求
+   - 从MPS获取计划生产量
+   - 从销售订单获取确认需求
+
+2. BOM展开
+   - 按层级展开BOM
+   - 计算各层级物料毛需求
+
+3. 库存检查
+   - 查询现有库存量
+   - 查询在途量(已订购未到货)
+   - 计算可用量
+
+4. 净需求计算
+   - 净需求 = 毛需求 - 在途量 - 可用量
+   - 考虑安全库存
+
+5. 供应建议
+   - 采购建议(原材料)
+   - 生产建议(半成品/成品)
+   - 考虑采购提前期/生产提前期
+```
+
+**MRP结果类型**:
+
+| 类型 | 说明 |
+|------|------|
+| purchase | 采购建议，转采购申请/采购订单 |
+| production | 生产建议，转生产订单 |
+
+### 生产订单状态流转
+
+```
+draft(草稿) 
+   ↓ [下达]
+released(已下达)
+   ↓ [开工]
+in_production(生产中)
+   ↓ [完工]
+completed(已完成)
+   ↓
+closed(已关闭)
+
+中途可操作:
+   ↓ [取消] → cancelled(已取消)
+   ↓ [关闭] → closed(已关闭)
+```
+
+### 数据库表结构
+
+完整SQL脚本: [erp_database.sql](file:///workspace/sql/erp_database.sql)
+
+**主要表清单**:
+
+| 类别 | 表名 | 说明 |
+|------|------|------|
+| 基础 | erp_material | 物料主数据 |
+| 基础 | erp_supplier | 供应商 |
+| 基础 | erp_customer | 客户 |
+| 基础 | erp_warehouse | 仓库 |
+| 基础 | erp_storage_location | 库位 |
+| 生产 | erp_bom | BOM主表 |
+| 生产 | erp_bom_item | BOM明细 |
+| 生产 | erp_work_center | 工作中心 |
+| 生产 | erp_process | 工序定义 |
+| 生产 | erp_production_order | 生产订单 |
+| 生产 | erp_mrp | MRP记录 |
+| 生产 | erp_mrp_suggestion | MRP建议 |
+| 生产 | erp_work_report | 报工记录 |
+| 采购 | erp_purchase_order | 采购订单 |
+| 采购 | erp_purchase_inbound | 采购入库 |
+| 销售 | erp_sales_order | 销售订单 |
+| 销售 | erp_sales_outbound | 销售出库 |
+| 库存 | erp_inventory | 库存台账 |
+| 库存 | erp_inventory_trans | 库存异动 |
+| 库存 | erp_stock_transfer | 调拨单 |
+| 库存 | erp_stock_check | 盘点单 |
+| 财务 | erp_receivable | 应收款 |
+| 财务 | erp_payable | 应付款 |
+| 财务 | erp_receipt | 收款单 |
+| 财务 | erp_payment | 付款单 |
+| 财务 | erp_voucher | 凭证 |
+
+### 未来扩展模块
+
+| 模块 | 说明 |
+|------|------|
+| erp-purchase | 采购管理（采购申请、采购订单、入库、退货） |
+| erp-sales | 销售管理（销售报价、销售订单、出库、退货） |
+| erp-inventory | 库存管理（入库、出库、调拨、盘点） |
+| erp-finance | 财务管理（应收应付、收付款、凭证） |
+| erp-quality | 质量管理（来料检验、过程检验、成品检验） |
+
+### 快速开始
+
+1. **导入数据库表**
+```sql
+source /path/to/sql/erp_database.sql
+```
+
+2. **确保模块已构建**
+```bash
+mvn clean install -pl erp-base,erp-production -am
+```
+
+3. **启动应用**
+```bash
+mvn spring-boot:run -pl ruoyi-admin
+```
+
+4. **访问ERP功能**
+- 物料管理: http://localhost/erp/base/material
+- BOM管理: http://localhost/erp/production/bom
+- 生产订单: http://localhost/erp/production/order
+- MRP运算: http://localhost/erp/production/mrp
+

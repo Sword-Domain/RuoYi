@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.erp.finance.mapper.ErpReceiptMapper">
+
+    <resultMap type="com.ruoyi.erp.finance.domain.ErpReceipt" id="ErpReceiptResult">
+        <result property="receiptId" column="receipt_id"/>
+        <result property="receiptNo" column="receipt_no"/>
+        <result property="customerId" column="customer_id"/>
+        <result property="customerName" column="customer_name"/>
+        <result property="salesOrderId" column="sales_order_id"/>
+        <result property="receiptDate" column="receipt_date"/>
+        <result property="bankAccountId" column="bank_account_id"/>
+        <result property="totalAmount" column="total_amount"/>
+        <result property="handlerId" column="handler_id"/>
+        <result property="status" column="status"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <sql id="selectVo">
+        select receipt_id, receipt_no, customer_id, customer_name, sales_order_id, receipt_date,
+               bank_account_id, total_amount, handler_id, status, create_by, create_time, update_by,
+               update_time, remark
+        from erp_receipt
+    </sql>
+
+    <select id="selectList" parameterType="com.ruoyi.erp.finance.domain.ErpReceipt" resultMap="ErpReceiptResult">
+        <include refid="selectVo"/>
+        <where>
+            <if test="receiptNo != null and receiptNo != ''">
+                AND receipt_no like concat('%', #{receiptNo}, '%')
+            </if>
+            <if test="customerId != null">
+                AND customer_id = #{customerId}
+            </if>
+            <if test="customerName != null and customerName != ''">
+                AND customer_name like concat('%', #{customerName}, '%')
+            </if>
+            <if test="salesOrderId != null">
+                AND sales_order_id = #{salesOrderId}
+            </if>
+            <if test="receiptDate != null">
+                AND receipt_date = #{receiptDate}
+            </if>
+            <if test="bankAccountId != null">
+                AND bank_account_id = #{bankAccountId}
+            </if>
+            <if test="handlerId != null">
+                AND handler_id = #{handlerId}
+            </if>
+            <if test="status != null and status != ''">
+                AND status = #{status}
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <select id="selectById" parameterType="Long" resultMap="ErpReceiptResult">
+        <include refid="selectVo"/>
+        where receipt_id = #{receiptId}
+    </select>
+
+    <insert id="insert" parameterType="com.ruoyi.erp.finance.domain.ErpReceipt" useGeneratedKeys="true" keyProperty="receiptId">
+        insert into erp_receipt
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="receiptNo != null and receiptNo != ''">receipt_no,</if>
+            <if test="customerId != null">customer_id,</if>
+            <if test="customerName != null and customerName != ''">customer_name,</if>
+            <if test="salesOrderId != null">sales_order_id,</if>
+            <if test="receiptDate != null">receipt_date,</if>
+            <if test="bankAccountId != null">bank_account_id,</if>
+            <if test="totalAmount != null">total_amount,</if>
+            <if test="handlerId != null">handler_id,</if>
+            <if test="status != null and status != ''">status,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="remark != null and remark != ''">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="receiptNo != null and receiptNo != ''">#{receiptNo},</if>
+            <if test="customerId != null">#{customerId},</if>
+            <if test="customerName != null and customerName != ''">#{customerName},</if>
+            <if test="salesOrderId != null">#{salesOrderId},</if>
+            <if test="receiptDate != null">#{receiptDate},</if>
+            <if test="bankAccountId != null">#{bankAccountId},</if>
+            <if test="totalAmount != null">#{totalAmount},</if>
+            <if test="handlerId != null">#{handlerId},</if>
+            <if test="status != null and status != ''">#{status},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="remark != null and remark != ''">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="update" parameterType="com.ruoyi.erp.finance.domain.ErpReceipt">
+        update erp_receipt
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="receiptNo != null and receiptNo != ''">receipt_no = #{receiptNo},</if>
+            <if test="customerId != null">customer_id = #{customerId},</if>
+            <if test="customerName != null and customerName != ''">customer_name = #{customerName},</if>
+            <if test="salesOrderId != null">sales_order_id = #{salesOrderId},</if>
+            <if test="receiptDate != null">receipt_date = #{receiptDate},</if>
+            <if test="bankAccountId != null">bank_account_id = #{bankAccountId},</if>
+            <if test="totalAmount != null">total_amount = #{totalAmount},</if>
+            <if test="handlerId != null">handler_id = #{handlerId},</if>
+            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null and remark != ''">remark = #{remark},</if>
+        </trim>
+        where receipt_id = #{receiptId}
+    </update>
+
+    <delete id="delete" parameterType="Long">
+        delete from erp_receipt where receipt_id = #{receiptId}
+    </delete>
+
+    <delete id="deleteByIds" parameterType="String">
+        delete from erp_receipt where receipt_id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

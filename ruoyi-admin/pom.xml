@@ -53,6 +53,42 @@
             <artifactId>ruoyi-generator</artifactId>
         </dependency>
 
+        <!-- ERP基础模块-->
+        <dependency>
+            <groupId>com.ruoyi</groupId>
+            <artifactId>erp-base</artifactId>
+        </dependency>
+
+        <!-- ERP生产计划模块-->
+        <dependency>
+            <groupId>com.ruoyi</groupId>
+            <artifactId>erp-production</artifactId>
+        </dependency>
+
+        <!-- ERP采购模块-->
+        <dependency>
+            <groupId>com.ruoyi</groupId>
+            <artifactId>erp-purchase</artifactId>
+        </dependency>
+
+        <!-- ERP销售模块-->
+        <dependency>
+            <groupId>com.ruoyi</groupId>
+            <artifactId>erp-sales</artifactId>
+        </dependency>
+
+        <!-- ERP库存模块-->
+        <dependency>
+            <groupId>com.ruoyi</groupId>
+            <artifactId>erp-inventory</artifactId>
+        </dependency>
+
+        <!-- ERP财务模块-->
+        <dependency>
+            <groupId>com.ruoyi</groupId>
+            <artifactId>erp-finance</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>
