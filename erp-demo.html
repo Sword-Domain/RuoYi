@@ -1303,48 +1303,50 @@
     </div>
 
     <script>
-        const navItems = document.querySelectorAll('.nav-item, .module-card');
-        const pages = document.querySelectorAll('.page');
-        const breadcrumb = document.getElementById('breadcrumb-current');
+        document.addEventListener('DOMContentLoaded', function() {
+            const navItems = document.querySelectorAll('.nav-item, .module-card');
+            const pages = document.querySelectorAll('.page');
+            const breadcrumb = document.getElementById('breadcrumb-current');
 
-        const pageNames = {
-            'dashboard': '首页概览',
-            'material': '物料管理',
-            'supplier': '供应商管理',
-            'customer': '客户管理',
-            'warehouse': '仓库管理',
-            'bom': 'BOM管理',
-            'production': '生产订单',
-            'mrp': 'MRP运算',
-            'purchase': '采购管理',
-            'sales': '销售管理',
-            'inventory': '库存管理',
-            'finance': '财务管理'
-        };
+            const pageNames = {
+                'dashboard': '首页概览',
+                'material': '物料管理',
+                'supplier': '供应商管理',
+                'customer': '客户管理',
+                'warehouse': '仓库管理',
+                'bom': 'BOM管理',
+                'production': '生产订单',
+                'mrp': 'MRP运算',
+                'purchase': '采购管理',
+                'sales': '销售管理',
+                'inventory': '库存管理',
+                'finance': '财务管理'
+            };
 
-        function switchPage(pageName) {
-            pages.forEach(p => p.classList.add('hidden'));
-            const targetPage = document.getElementById('page-' + pageName);
-            if (targetPage) {
-                targetPage.classList.remove('hidden');
-            }
-
-            navItems.forEach(item => item.classList.remove('active'));
-            document.querySelectorAll(`.nav-item[data-page="${pageName}"]`).forEach(item => {
-                item.classList.add('active');
-            });
-
-            if (pageNames[pageName]) {
-                breadcrumb.textContent = pageNames[pageName];
-            }
-        }
-
-        navItems.forEach(item => {
-            item.addEventListener('click', () => {
-                const page = item.getAttribute('data-page');
-                if (page) {
-                    switchPage(page);
+            function switchPage(pageName) {
+                pages.forEach(p => p.classList.add('hidden'));
+                const targetPage = document.getElementById('page-' + pageName);
+                if (targetPage) {
+                    targetPage.classList.remove('hidden');
                 }
+
+                navItems.forEach(item => item.classList.remove('active'));
+                document.querySelectorAll('.nav-item[data-page="' + pageName + '"]').forEach(item => {
+                    item.classList.add('active');
+                });
+
+                if (pageNames[pageName]) {
+                    breadcrumb.textContent = pageNames[pageName];
+                }
+            }
+
+            navItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    const page = this.getAttribute('data-page');
+                    if (page) {
+                        switchPage(page);
+                    }
+                });
             });
         });
     </script>
