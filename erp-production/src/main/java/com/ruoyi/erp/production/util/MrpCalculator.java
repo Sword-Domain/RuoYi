@@ -49,6 +49,7 @@ public class MrpCalculator {
         private BigDecimal scheduledReceipt = BigDecimal.ZERO;
         private BigDecimal onhandQuantity = BigDecimal.ZERO;
         private BigDecimal allocatedQuantity = BigDecimal.ZERO;
+        private BigDecimal availableQuantity = BigDecimal.ZERO;
         private BigDecimal safetyStock = BigDecimal.ZERO;
         private BigDecimal netRequirement = BigDecimal.ZERO;
         private BigDecimal replenishmentQty = BigDecimal.ZERO;
@@ -110,6 +111,14 @@ public class MrpCalculator {
 
         public void setAllocatedQuantity(BigDecimal allocatedQuantity) {
             this.allocatedQuantity = allocatedQuantity;
+        }
+
+        public BigDecimal getAvailableQuantity() {
+            return availableQuantity;
+        }
+
+        public void setAvailableQuantity(BigDecimal availableQuantity) {
+            this.availableQuantity = availableQuantity;
         }
 
         public BigDecimal getSafetyStock() {
@@ -258,6 +267,70 @@ public class MrpCalculator {
         private Long mpsItemId;
         private Long bomId;
         private int priority;
+
+        public Long getMaterialId() {
+            return materialId;
+        }
+
+        public void setMaterialId(Long materialId) {
+            this.materialId = materialId;
+        }
+
+        public String getMaterialCode() {
+            return materialCode;
+        }
+
+        public void setMaterialCode(String materialCode) {
+            this.materialCode = materialCode;
+        }
+
+        public String getMaterialName() {
+            return materialName;
+        }
+
+        public void setMaterialName(String materialName) {
+            this.materialName = materialName;
+        }
+
+        public BigDecimal getRequiredQuantity() {
+            return requiredQuantity;
+        }
+
+        public void setRequiredQuantity(BigDecimal requiredQuantity) {
+            this.requiredQuantity = requiredQuantity;
+        }
+
+        public Date getRequiredDate() {
+            return requiredDate;
+        }
+
+        public void setRequiredDate(Date requiredDate) {
+            this.requiredDate = requiredDate;
+        }
+
+        public Long getMpsItemId() {
+            return mpsItemId;
+        }
+
+        public void setMpsItemId(Long mpsItemId) {
+            this.mpsItemId = mpsItemId;
+        }
+
+        public Long getBomId() {
+            return bomId;
+        }
+
+        public void setBomId(Long bomId) {
+            this.bomId = bomId;
+        }
+
+        public int getPriority() {
+            return priority;
+        }
+
+        public void setPriority(int priority) {
+            this.priority = priority;
+        }
     }
 
     public MrpResult calculateMrp(

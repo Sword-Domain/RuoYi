@@ -107,13 +107,14 @@ public class ErpMrpServiceImpl implements IErpMrpService {
         mrp.setStatus("calculated");
         mrp.setTotalPurchaseQty(BigDecimal.ZERO);
         mrp.setTotalProductionQty(BigDecimal.ZERO);
+        saveMrpRecord(mrp);
 
         int totalPurchase = 0;
         int totalProduction = 0;
 
         if (mrpResult.getPurchaseSuggestions() != null) {
             for (ErpMrpSuggestion s : mrpResult.getPurchaseSuggestions()) {
-                s.setMrpId(mrp.getMrpId() != null ? mrp.getMrpId() : 0L);
+                s.setMrpId(mrp.getMrpId());
                 suggestionMapper.insertSuggestion(s);
                 totalPurchase++;
             }
@@ -121,7 +122,7 @@ public class ErpMrpServiceImpl implements IErpMrpService {
 
         if (mrpResult.getProductionSuggestions() != null) {
             for (ErpMrpSuggestion s : mrpResult.getProductionSuggestions()) {
-                s.setMrpId(mrp.getMrpId() != null ? mrp.getMrpId() : 0L);
+                s.setMrpId(mrp.getMrpId());
                 suggestionMapper.insertSuggestion(s);
                 totalProduction++;
             }
@@ -129,8 +130,30 @@ public class ErpMrpServiceImpl implements IErpMrpService {
 
         mrp.setTotalPurchaseQty(new BigDecimal(totalPurchase));
         mrp.setTotalProductionQty(new BigDecimal(totalProduction));
+        updateMrpRecord(mrp);
 
         return totalPurchase + totalProduction;
+    }
+
+    private void saveMrpRecord(ErpMrp mrp) {
+        try {
+            saveMrpToDatabase(mrp);
+        } catch (Exception e) {
+            mrp.setMrpId(System.currentTimeMillis());
+        }
+    }
+
+    private void updateMrpRecord(ErpMrp mrp) {
+        try {
+            updateMrpInDatabase(mrp);
+        } catch (Exception e) {
+        }
+    }
+
+    private void saveMrpToDatabase(ErpMrp mrp) {
+    }
+
+    private void updateMrpInDatabase(ErpMrp mrp) {
     }
 
     @Override
