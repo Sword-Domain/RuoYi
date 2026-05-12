@@ -220,81 +220,6 @@
                 <button class="btn btn-outline" onclick="closeModal()">取消</button>
                 <button class="btn btn-primary" id="modalConfirmBtn" onclick="confirmModal()">确定</button>
             </div>
-
-            <!-- User Management Page -->
-            <div id="page-userManagement" class="page hidden">
-                <div class="page-header"><h1 class="page-title">用户管理</h1><p class="page-desc">管理系统用户账号和权限</p></div>
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">用户列表</h3>
-                        <div class="card-actions"><button class="btn btn-primary" onclick="openUserModal()">+ 新增用户</button></div>
-                    </div>
-                    <table class="table">
-                        <thead><tr><th>用户ID</th><th>用户名</th><th>姓名</th><th>邮箱</th><th>角色</th><th>状态</th><th>最后登录</th><th>操作</th></tr></thead>
-                        <tbody id="userTableBody">
-                            <tr><td>1</td><td>admin</td><td>系统管理员</td><td>admin@ruoyi.com</td><td><span class="status-badge status-primary">超级管理员</span></td><td><span class="status-badge status-success">启用</span></td><td>2026-05-12 09:30</td><td><button class="action-btn edit" onclick="editUser(1)">编辑</button><button class="action-btn view" onclick="viewUser(1)">详情</button></td></tr>
-                            <tr><td>2</td><td>zhangsan</td><td>张三</td><td>zhangsan@ruoyi.com</td><td><span class="status-badge status-warning">生产主管</span></td><td><span class="status-badge status-success">启用</span></td><td>2026-05-11 16:45</td><td><button class="action-btn edit" onclick="editUser(2)">编辑</button><button class="action-btn delete" onclick="toggleUserStatus(2)">禁用</button><button class="action-btn view" onclick="viewUser(2)">详情</button></td></tr>
-                            <tr><td>3</td><td>lisi</td><td>李四</td><td>lisi@ruoyi.com</td><td><span class="status-badge status-warning">采购专员</span></td><td><span class="status-badge status-warning">禁用</span></td><td>2026-05-10 14:20</td><td><button class="action-btn edit" onclick="editUser(3)">编辑</button><button class="action-btn view" onclick="viewUser(3)">详情</button></td></tr>
-                            <tr><td>4</td><td>wangwu</td><td>王五</td><td>wangwu@ruoyi.com</td><td><span class="status-badge status-warning">仓库管理员</span></td><td><span class="status-badge status-success">启用</span></td><td>2026-05-12 08:15</td><td><button class="action-btn edit" onclick="editUser(4)">编辑</button><button class="action-btn delete" onclick="toggleUserStatus(4)">禁用</button><button class="action-btn view" onclick="viewUser(4)">详情</button></td></tr>
-                            <tr><td>5</td><td>zhaoliu</td><td>赵六</td><td>zhaoliu@ruoyi.com</td><td><span class="status-badge status-warning">销售员</span></td><td><span class="status-badge status-success">启用</span></td><td>2026-05-11 17:30</td><td><button class="action-btn edit" onclick="editUser(5)">编辑</button><button class="action-btn delete" onclick="toggleUserStatus(5)">禁用</button><button class="action-btn view" onclick="viewUser(5)">详情</button></td></tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="grid-2">
-                    <div class="card">
-                        <div class="card-header"><h3 class="card-title">角色权限概览</h3></div>
-                        <div style="padding: 24px;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--gray-100);">
-                                <div><span class="status-badge status-primary" style="margin-right: 12px;">超级管理员</span><span style="color: var(--gray-600); font-size: 14px;">拥有所有权限</span></div>
-                                <span style="font-weight: 600;">1人</span>
-                            </div>
-                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--gray-100);">
-                                <div><span class="status-badge status-warning" style="margin-right: 12px;">生产主管</span><span style="color: var(--gray-600); font-size: 14px;">生产、BOM、MRP</span></div>
-                                <span style="font-weight: 600;">1人</span>
-                            </div>
-                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--gray-100);">
-                                <div><span class="status-badge status-warning" style="margin-right: 12px;">采购专员</span><span style="color: var(--gray-600); font-size: 14px;">采购、供应商</span></div>
-                                <span style="font-weight: 600;">1人</span>
-                            </div>
-                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--gray-100);">
-                                <div><span class="status-badge status-warning" style="margin-right: 12px;">仓库管理员</span><span style="color: var(--gray-600); font-size: 14px;">库存、仓库</span></div>
-                                <span style="font-weight: 600;">1人</span>
-                            </div>
-                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 14px 0;">
-                                <div><span class="status-badge status-warning" style="margin-right: 12px;">销售员</span><span style="color: var(--gray-600); font-size: 14px;">销售、客户</span></div>
-                                <span style="font-weight: 600;">1人</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-header"><h3 class="card-title">登录统计</h3></div>
-                        <div style="padding: 24px;">
-                            <div style="margin-bottom: 20px;">
-                                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                                    <span style="color: var(--gray-600); font-size: 14px;">今日登录</span>
-                                    <span style="font-weight: 600; color: var(--success);">3人</span>
-                                </div>
-                                <div class="progress-bar" style="width: 100%;"><div class="progress-fill" style="width: 60%;"></div></div>
-                            </div>
-                            <div style="margin-bottom: 20px;">
-                                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                                    <span style="color: var(--gray-600); font-size: 14px;">本周登录</span>
-                                    <span style="font-weight: 600; color: var(--primary);">5人</span>
-                                </div>
-                                <div class="progress-bar" style="width: 100%;"><div class="progress-fill" style="width: 100%;"></div></div>
-                            </div>
-                            <div>
-                                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                                    <span style="color: var(--gray-600); font-size: 14px;">本月活跃</span>
-                                    <span style="font-weight: 600; color: var(--info);">4人</span>
-                                </div>
-                                <div class="progress-bar" style="width: 100%;"><div class="progress-fill" style="width: 80%;"></div></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 
     <div class="sidebar">
@@ -739,6 +664,80 @@
                 <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
                     <button class="btn btn-outline" onclick="resetSettings()">重置默认</button>
                     <button class="btn btn-primary" onclick="saveSettings()">保存设置</button>
+                </div>
+            </div>
+
+            <!-- User Management Page -->
+            <div id="page-userManagement" class="page hidden">
+                <div class="page-header"><h1 class="page-title">用户管理</h1><p class="page-desc">管理系统用户账号和权限</p></div>
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">用户列表</h3>
+                        <div class="card-actions"><button class="btn btn-primary" onclick="openUserModal()">+ 新增用户</button></div>
+                    </div>
+                    <table class="table">
+                        <thead><tr><th>用户ID</th><th>用户名</th><th>姓名</th><th>邮箱</th><th>角色</th><th>状态</th><th>最后登录</th><th>操作</th></tr></thead>
+                        <tbody id="userTableBody">
+                            <tr><td>1</td><td>admin</td><td>系统管理员</td><td>admin@ruoyi.com</td><td><span class="status-badge status-primary">超级管理员</span></td><td><span class="status-badge status-success">启用</span></td><td>2026-05-12 09:30</td><td><button class="action-btn edit" onclick="editUser(1)">编辑</button><button class="action-btn view" onclick="viewUser(1)">详情</button></td></tr>
+                            <tr><td>2</td><td>zhangsan</td><td>张三</td><td>zhangsan@ruoyi.com</td><td><span class="status-badge status-warning">生产主管</span></td><td><span class="status-badge status-success">启用</span></td><td>2026-05-11 16:45</td><td><button class="action-btn edit" onclick="editUser(2)">编辑</button><button class="action-btn delete" onclick="toggleUserStatus(2)">禁用</button><button class="action-btn view" onclick="viewUser(2)">详情</button></td></tr>
+                            <tr><td>3</td><td>lisi</td><td>李四</td><td>lisi@ruoyi.com</td><td><span class="status-badge status-warning">采购专员</span></td><td><span class="status-badge status-warning">禁用</span></td><td>2026-05-10 14:20</td><td><button class="action-btn edit" onclick="editUser(3)">编辑</button><button class="action-btn view" onclick="viewUser(3)">详情</button></td></tr>
+                            <tr><td>4</td><td>wangwu</td><td>王五</td><td>wangwu@ruoyi.com</td><td><span class="status-badge status-warning">仓库管理员</span></td><td><span class="status-badge status-success">启用</span></td><td>2026-05-12 08:15</td><td><button class="action-btn edit" onclick="editUser(4)">编辑</button><button class="action-btn delete" onclick="toggleUserStatus(4)">禁用</button><button class="action-btn view" onclick="viewUser(4)">详情</button></td></tr>
+                            <tr><td>5</td><td>zhaoliu</td><td>赵六</td><td>zhaoliu@ruoyi.com</td><td><span class="status-badge status-warning">销售员</span></td><td><span class="status-badge status-success">启用</span></td><td>2026-05-11 17:30</td><td><button class="action-btn edit" onclick="editUser(5)">编辑</button><button class="action-btn delete" onclick="toggleUserStatus(5)">禁用</button><button class="action-btn view" onclick="viewUser(5)">详情</button></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="grid-2">
+                    <div class="card">
+                        <div class="card-header"><h3 class="card-title">角色权限概览</h3></div>
+                        <div style="padding: 24px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--gray-100);">
+                                <div><span class="status-badge status-primary" style="margin-right: 12px;">超级管理员</span><span style="color: var(--gray-600); font-size: 14px;">拥有所有权限</span></div>
+                                <span style="font-weight: 600;">1人</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--gray-100);">
+                                <div><span class="status-badge status-warning" style="margin-right: 12px;">生产主管</span><span style="color: var(--gray-600); font-size: 14px;">生产、BOM、MRP</span></div>
+                                <span style="font-weight: 600;">1人</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--gray-100);">
+                                <div><span class="status-badge status-warning" style="margin-right: 12px;">采购专员</span><span style="color: var(--gray-600); font-size: 14px;">采购、供应商</span></div>
+                                <span style="font-weight: 600;">1人</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--gray-100);">
+                                <div><span class="status-badge status-warning" style="margin-right: 12px;">仓库管理员</span><span style="color: var(--gray-600); font-size: 14px;">库存、仓库</span></div>
+                                <span style="font-weight: 600;">1人</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 14px 0;">
+                                <div><span class="status-badge status-warning" style="margin-right: 12px;">销售员</span><span style="color: var(--gray-600); font-size: 14px;">销售、客户</span></div>
+                                <span style="font-weight: 600;">1人</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header"><h3 class="card-title">登录统计</h3></div>
+                        <div style="padding: 24px;">
+                            <div style="margin-bottom: 20px;">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                    <span style="color: var(--gray-600); font-size: 14px;">今日登录</span>
+                                    <span style="font-weight: 600; color: var(--success);">3人</span>
+                                </div>
+                                <div class="progress-bar" style="width: 100%;"><div class="progress-fill" style="width: 60%;"></div></div>
+                            </div>
+                            <div style="margin-bottom: 20px;">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                    <span style="color: var(--gray-600); font-size: 14px;">本周登录</span>
+                                    <span style="font-weight: 600; color: var(--primary);">5人</span>
+                                </div>
+                                <div class="progress-bar" style="width: 100%;"><div class="progress-fill" style="width: 100%;"></div></div>
+                            </div>
+                            <div>
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                    <span style="color: var(--gray-600); font-size: 14px;">本月活跃</span>
+                                    <span style="font-weight: 600; color: var(--info);">4人</span>
+                                </div>
+                                <div class="progress-bar" style="width: 100%;"><div class="progress-fill" style="width: 80%;"></div></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
