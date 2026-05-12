@@ -159,6 +159,14 @@
         @keyframes spin { to { transform: rotate(360deg); } }
         
         select.form-input { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748b' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 36px; }
+        
+        /* Toggle Switch */
+        .switch { position: relative; display: inline-block; width: 44px; height: 24px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--gray-300); transition: .4s; border-radius: 24px; }
+        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--primary); }
+        input:checked + .slider:before { transform: translateX(20px); }
     </style>
 </head>
 <body>
@@ -225,9 +233,13 @@
                 <div class="nav-item" data-page="finance"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><span>财务管理</span></div>
             </div>
         </div>
+        <div class="nav-section">
+            <div class="nav-title" onclick="toggleNavSection(this)">系统设置 <span class="arrow">▼</span></div>
+            <div class="nav-items">
+                <div class="nav-item" data-page="settings"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg><span>基本设置</span></div>
+            </div>
+        </div>
     </div>
-
-    <div class="main-wrapper">
         <div class="header">
             <div class="breadcrumb"><span>ERP系统</span><span>/</span><span class="current" id="breadcrumb-current">首页概览</span></div>
             <div class="header-right">
@@ -541,6 +553,82 @@
                             <tbody><tr><td>AP20260505001</td><td>宝钢特钢有限公司</td><td>¥142,500</td><td><span class="status-badge status-warning">待付款</span></td></tr></tbody>
                         </table>
                     </div>
+                </div>
+            </div>
+
+            <!-- Settings Page -->
+            <div id="page-settings" class="page hidden">
+                <div class="page-header"><h1 class="page-title">系统设置</h1><p class="page-desc">配置系统基本参数</p></div>
+                <div class="grid-2">
+                    <div class="card">
+                        <div class="card-header"><h3 class="card-title">基本信息</h3></div>
+                        <div style="padding: 24px;">
+                            <div class="form-group"><label class="form-label">系统名称</label><input class="form-input" id="sysName" value="若依ERP管理系统"></div>
+                            <div class="form-group"><label class="form-label">系统版本</label><input class="form-input" id="sysVersion" value="v1.0.0" disabled></div>
+                            <div class="form-group"><label class="form-label">企业名称</label><input class="form-input" id="sysCompany" placeholder="请输入企业名称"></div>
+                            <div class="form-group"><label class="form-label">联系电话</label><input class="form-input" id="sysPhone" placeholder="请输入联系电话"></div>
+                            <div class="form-group"><label class="form-label">企业地址</label><input class="form-input" id="sysAddress" placeholder="请输入企业地址"></div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header"><h3 class="card-title">业务参数</h3></div>
+                        <div style="padding: 24px;">
+                            <div class="form-group"><label class="form-label">默认币种</label>
+                                <select class="form-input" id="sysCurrency"><option value="CNY">人民币 (CNY)</option><option value="USD">美元 (USD)</option><option value="EUR">欧元 (EUR)</option></select>
+                            </div>
+                            <div class="form-group"><label class="form-label">税率(%)</label><input class="form-input" id="sysTaxRate" type="number" value="13"></div>
+                            <div class="form-group"><label class="form-label">订单编号前缀</label><input class="form-input" id="sysOrderPrefix" value="ORD"></div>
+                            <div class="form-group"><label class="form-label">默认仓库</label>
+                                <select class="form-input" id="sysDefaultWarehouse"><option value="1">原材料主仓</option><option value="2">成品仓</option></select>
+                            </div>
+                            <div class="form-group"><label class="form-label">库存预警阈值</label><input class="form-input" id="sysStockThreshold" type="number" value="10"></div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header"><h3 class="card-title">通知设置</h3></div>
+                        <div style="padding: 24px;">
+                            <div class="form-group" style="display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--gray-100);">
+                                <span>库存不足预警</span>
+                                <label class="switch"><input type="checkbox" id="sysStockAlert" checked><span class="slider"></span></label>
+                            </div>
+                            <div class="form-group" style="display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--gray-100);">
+                                <span>订单状态变更通知</span>
+                                <label class="switch"><input type="checkbox" id="sysOrderAlert" checked><span class="slider"></span></label>
+                            </div>
+                            <div class="form-group" style="display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--gray-100);">
+                                <span>生产完成通知</span>
+                                <label class="switch"><input type="checkbox" id="sysProductionAlert"><span class="slider"></span></label>
+                            </div>
+                            <div class="form-group" style="display: flex; align-items: center; justify-content: space-between; padding: 12px 0;">
+                                <span>每日报表推送</span>
+                                <label class="switch"><input type="checkbox" id="sysDailyReport"><span class="slider"></span></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header"><h3 class="card-title">数据管理</h3></div>
+                        <div style="padding: 24px;">
+                            <div style="margin-bottom: 16px;">
+                                <p style="color: var(--gray-500); margin-bottom: 12px; font-size: 14px;">导出数据或清除演示数据。</p>
+                                <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                                    <button class="btn btn-outline" onclick="exportData()">导出数据</button>
+                                    <button class="btn btn-outline" onclick="importData()">导入数据</button>
+                                    <button class="btn btn-danger" onclick="clearDemoData()">清除演示数据</button>
+                                </div>
+                            </div>
+                            <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--gray-200);">
+                                <p style="color: var(--gray-500); margin-bottom: 12px; font-size: 14px;">系统信息</p>
+                                <p style="font-size: 14px;">物料数量：<span id="infoMaterialCount">0</span></p>
+                                <p style="font-size: 14px;">BOM数量：<span id="infoBomCount">0</span></p>
+                                <p style="font-size: 14px;">生产订单：<span id="infoProductionCount">0</span></p>
+                                <p style="font-size: 14px;">最后更新：<span id="infoLastUpdate">--</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
+                    <button class="btn btn-outline" onclick="resetSettings()">重置默认</button>
+                    <button class="btn btn-primary" onclick="saveSettings()">保存设置</button>
                 </div>
             </div>
         </div>
@@ -1038,6 +1126,133 @@
                 showToast('库存' + typeText + Math.abs(parseInt(qty)) + '个，调整成功', 'success');
             });
         }
+
+        // Settings Functions
+        function loadSettings() {
+            const settings = JSON.parse(localStorage.getItem('erpSettings') || '{}');
+            if (settings.name) document.getElementById('sysName').value = settings.name;
+            if (settings.company) document.getElementById('sysCompany').value = settings.company;
+            if (settings.phone) document.getElementById('sysPhone').value = settings.phone;
+            if (settings.address) document.getElementById('sysAddress').value = settings.address;
+            if (settings.currency) document.getElementById('sysCurrency').value = settings.currency;
+            if (settings.taxRate !== undefined) document.getElementById('sysTaxRate').value = settings.taxRate;
+            if (settings.orderPrefix) document.getElementById('sysOrderPrefix').value = settings.orderPrefix;
+            if (settings.defaultWarehouse) document.getElementById('sysDefaultWarehouse').value = settings.defaultWarehouse;
+            if (settings.stockThreshold !== undefined) document.getElementById('sysStockThreshold').value = settings.stockThreshold;
+            if (settings.stockAlert !== undefined) document.getElementById('sysStockAlert').checked = settings.stockAlert;
+            if (settings.orderAlert !== undefined) document.getElementById('sysOrderAlert').checked = settings.orderAlert;
+            if (settings.productionAlert !== undefined) document.getElementById('sysProductionAlert').checked = settings.productionAlert;
+            if (settings.dailyReport !== undefined) document.getElementById('sysDailyReport').checked = settings.dailyReport;
+            updateSettingsInfo();
+        }
+
+        function saveSettings() {
+            const settings = {
+                name: document.getElementById('sysName').value,
+                company: document.getElementById('sysCompany').value,
+                phone: document.getElementById('sysPhone').value,
+                address: document.getElementById('sysAddress').value,
+                currency: document.getElementById('sysCurrency').value,
+                taxRate: document.getElementById('sysTaxRate').value,
+                orderPrefix: document.getElementById('sysOrderPrefix').value,
+                defaultWarehouse: document.getElementById('sysDefaultWarehouse').value,
+                stockThreshold: document.getElementById('sysStockThreshold').value,
+                stockAlert: document.getElementById('sysStockAlert').checked,
+                orderAlert: document.getElementById('sysOrderAlert').checked,
+                productionAlert: document.getElementById('sysProductionAlert').checked,
+                dailyReport: document.getElementById('sysDailyReport').checked,
+                lastUpdate: new Date().toLocaleString('zh-CN')
+            };
+            localStorage.setItem('erpSettings', JSON.stringify(settings));
+            updateSettingsInfo();
+            showToast('系统设置已保存', 'success');
+        }
+
+        function resetSettings() {
+            document.getElementById('sysName').value = '若依ERP管理系统';
+            document.getElementById('sysCompany').value = '';
+            document.getElementById('sysPhone').value = '';
+            document.getElementById('sysAddress').value = '';
+            document.getElementById('sysCurrency').value = 'CNY';
+            document.getElementById('sysTaxRate').value = '13';
+            document.getElementById('sysOrderPrefix').value = 'ORD';
+            document.getElementById('sysDefaultWarehouse').value = '1';
+            document.getElementById('sysStockThreshold').value = '10';
+            document.getElementById('sysStockAlert').checked = true;
+            document.getElementById('sysOrderAlert').checked = true;
+            document.getElementById('sysProductionAlert').checked = false;
+            document.getElementById('sysDailyReport').checked = false;
+            localStorage.removeItem('erpSettings');
+            showToast('已重置为默认设置', 'success');
+        }
+
+        function updateSettingsInfo() {
+            document.getElementById('infoMaterialCount').textContent = dataStore.materials.length;
+            document.getElementById('infoBomCount').textContent = dataStore.boms.length;
+            document.getElementById('infoProductionCount').textContent = dataStore.productions.length;
+            const settings = JSON.parse(localStorage.getItem('erpSettings') || '{}');
+            document.getElementById('infoLastUpdate').textContent = settings.lastUpdate || '--';
+        }
+
+        function exportData() {
+            const exportObj = {
+                dataStore: dataStore,
+                settings: JSON.parse(localStorage.getItem('erpSettings') || '{}'),
+                exportDate: new Date().toISOString()
+            };
+            const blob = new Blob([JSON.stringify(exportObj, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'erp_data_' + new Date().toISOString().split('T')[0] + '.json';
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('数据导出成功', 'success');
+        }
+
+        function importData() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            input.onchange = (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = (evt) => {
+                    try {
+                        const importObj = JSON.parse(evt.target.result);
+                        if (importObj.dataStore) {
+                            Object.assign(dataStore, importObj.dataStore);
+                            showToast('数据导入成功，请刷新页面查看', 'success');
+                        } else {
+                            showToast('无效的数据文件格式', 'error');
+                        }
+                    } catch (err) {
+                        showToast('数据解析失败', 'error');
+                    }
+                };
+                reader.readAsText(file);
+            };
+            input.click();
+        }
+
+        function clearDemoData() {
+            openModal('确认清除', '<p style="margin-bottom: 16px; color: var(--danger); font-weight: 500;">此操作将清除所有演示数据，确定继续？</p>', () => {
+                dataStore.materials = [];
+                dataStore.boms = [];
+                dataStore.productions = [];
+                dataStore.suppliers = [];
+                dataStore.customers = [];
+                dataStore.warehouses = [];
+                localStorage.removeItem('erpSettings');
+                showToast('演示数据已清除', 'success');
+                updateSettingsInfo();
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadSettings();
+        });
     </script>
 </body>
 </html>
