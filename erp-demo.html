@@ -167,12 +167,6 @@
         .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
         input:checked + .slider { background-color: var(--primary); }
         input:checked + .slider:before { transform: translateX(20px); }
-        
-        /* Tab Buttons */
-        .settings-tabs { display: flex; gap: 8px; border-bottom: 2px solid var(--gray-200); }
-        .tab-btn { padding: 12px 24px; background: none; border: none; font-size: 15px; font-weight: 500; color: var(--gray-500); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
-        .tab-btn:hover { color: var(--primary); }
-        .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); }
     </style>
 </head>
 <body>
@@ -564,110 +558,77 @@
 
             <!-- Settings Page -->
             <div id="page-settings" class="page hidden">
-                <div class="page-header">
-                    <h1 class="page-title">系统设置</h1>
-                    <p class="page-desc">配置系统基本参数和用户管理</p>
-                </div>
-                
-                <!-- Settings Tabs -->
-                <div class="settings-tabs" style="margin-bottom: 24px;">
-                    <button class="tab-btn active" onclick="switchSettingsTab('basic', this)">基本设置</button>
-                    <button class="tab-btn" onclick="switchSettingsTab('users', this)">用户管理</button>
-                </div>
-                
-                <!-- Basic Settings Tab -->
-                <div id="settings-tab-basic" class="settings-tab-content">
-                    <div class="grid-2">
-                        <div class="card">
-                            <div class="card-header"><h3 class="card-title">基本信息</h3></div>
-                            <div style="padding: 24px;">
-                                <div class="form-group"><label class="form-label">系统名称</label><input class="form-input" id="sysName" value="若依ERP管理系统"></div>
-                                <div class="form-group"><label class="form-label">系统版本</label><input class="form-input" id="sysVersion" value="v1.0.0" disabled style="background: var(--gray-100);"></div>
-                                <div class="form-group"><label class="form-label">企业名称</label><input class="form-input" id="sysCompany" placeholder="请输入企业名称"></div>
-                                <div class="form-group"><label class="form-label">联系电话</label><input class="form-input" id="sysPhone" placeholder="请输入联系电话"></div>
-                                <div class="form-group"><label class="form-label">企业地址</label><input class="form-input" id="sysAddress" placeholder="请输入企业地址"></div>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <div class="card-header"><h3 class="card-title">业务参数</h3></div>
-                            <div style="padding: 24px;">
-                                <div class="form-group"><label class="form-label">默认币种</label>
-                                    <select class="form-input" id="sysCurrency"><option value="CNY">人民币 (CNY)</option><option value="USD">美元 (USD)</option><option value="EUR">欧元 (EUR)</option></select>
-                                </div>
-                                <div class="form-group"><label class="form-label">税率(%)</label><input class="form-input" id="sysTaxRate" type="number" value="13"></div>
-                                <div class="form-group"><label class="form-label">订单编号前缀</label><input class="form-input" id="sysOrderPrefix" value="ORD"></div>
-                                <div class="form-group"><label class="form-label">默认仓库</label>
-                                    <select class="form-input" id="sysDefaultWarehouse"><option value="1">原材料主仓</option><option value="2">成品仓</option></select>
-                                </div>
-                                <div class="form-group"><label class="form-label">库存预警阈值</label><input class="form-input" id="sysStockThreshold" type="number" value="10"></div>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <div class="card-header"><h3 class="card-title">通知设置</h3></div>
-                            <div style="padding: 24px;">
-                                <div class="form-group" style="display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--gray-100);">
-                                    <span>库存不足预警</span>
-                                    <label class="switch"><input type="checkbox" id="sysStockAlert" checked><span class="slider"></span></label>
-                                </div>
-                                <div class="form-group" style="display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--gray-100);">
-                                    <span>订单状态变更通知</span>
-                                    <label class="switch"><input type="checkbox" id="sysOrderAlert" checked><span class="slider"></span></label>
-                                </div>
-                                <div class="form-group" style="display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--gray-100);">
-                                    <span>生产完成通知</span>
-                                    <label class="switch"><input type="checkbox" id="sysProductionAlert"><span class="slider"></span></label>
-                                </div>
-                                <div class="form-group" style="display: flex; align-items: center; justify-content: space-between; padding: 12px 0;">
-                                    <span>每日报表推送</span>
-                                    <label class="switch"><input type="checkbox" id="sysDailyReport"><span class="slider"></span></label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <div class="card-header"><h3 class="card-title">数据管理</h3></div>
-                            <div style="padding: 24px;">
-                                <div style="margin-bottom: 16px;">
-                                    <p style="color: var(--gray-500); margin-bottom: 12px; font-size: 14px;">导出数据或清除演示数据。</p>
-                                    <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-                                        <button class="btn btn-outline" onclick="exportData()">导出数据</button>
-                                        <button class="btn btn-outline" onclick="importData()">导入数据</button>
-                                        <button class="btn btn-danger" onclick="clearDemoData()">清除演示数据</button>
-                                    </div>
-                                </div>
-                                <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--gray-200);">
-                                    <p style="color: var(--gray-500); margin-bottom: 12px; font-size: 14px;">系统信息</p>
-                                    <p style="font-size: 14px;">物料数量：<span id="infoMaterialCount">0</span></p>
-                                    <p style="font-size: 14px;">BOM数量：<span id="infoBomCount">0</span></p>
-                                    <p style="font-size: 14px;">生产订单：<span id="infoProductionCount">0</span></p>
-                                    <p style="font-size: 14px;">最后更新：<span id="infoLastUpdate">--</span></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
-                        <button class="btn btn-outline" onclick="resetSettings()">重置默认</button>
-                        <button class="btn btn-primary" onclick="saveSettings()">保存设置</button>
-                    </div>
-                </div>
-                
-                <!-- User Management Tab -->
-                <div id="settings-tab-users" class="settings-tab-content hidden">
+                <div class="page-header"><h1 class="page-title">系统设置</h1><p class="page-desc">配置系统基本参数</p></div>
+                <div class="grid-2">
                     <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title">用户列表</h3>
-                            <div class="card-actions">
-                                <button class="btn btn-primary" onclick="openUserModal()">+ 新增用户</button>
+                        <div class="card-header"><h3 class="card-title">基本信息</h3></div>
+                        <div style="padding: 24px;">
+                            <div class="form-group"><label class="form-label">系统名称</label><input class="form-input" id="sysName" value="若依ERP管理系统"></div>
+                            <div class="form-group"><label class="form-label">系统版本</label><input class="form-input" id="sysVersion" value="v1.0.0" disabled></div>
+                            <div class="form-group"><label class="form-label">企业名称</label><input class="form-input" id="sysCompany" placeholder="请输入企业名称"></div>
+                            <div class="form-group"><label class="form-label">联系电话</label><input class="form-input" id="sysPhone" placeholder="请输入联系电话"></div>
+                            <div class="form-group"><label class="form-label">企业地址</label><input class="form-input" id="sysAddress" placeholder="请输入企业地址"></div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header"><h3 class="card-title">业务参数</h3></div>
+                        <div style="padding: 24px;">
+                            <div class="form-group"><label class="form-label">默认币种</label>
+                                <select class="form-input" id="sysCurrency"><option value="CNY">人民币 (CNY)</option><option value="USD">美元 (USD)</option><option value="EUR">欧元 (EUR)</option></select>
+                            </div>
+                            <div class="form-group"><label class="form-label">税率(%)</label><input class="form-input" id="sysTaxRate" type="number" value="13"></div>
+                            <div class="form-group"><label class="form-label">订单编号前缀</label><input class="form-input" id="sysOrderPrefix" value="ORD"></div>
+                            <div class="form-group"><label class="form-label">默认仓库</label>
+                                <select class="form-input" id="sysDefaultWarehouse"><option value="1">原材料主仓</option><option value="2">成品仓</option></select>
+                            </div>
+                            <div class="form-group"><label class="form-label">库存预警阈值</label><input class="form-input" id="sysStockThreshold" type="number" value="10"></div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header"><h3 class="card-title">通知设置</h3></div>
+                        <div style="padding: 24px;">
+                            <div class="form-group" style="display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--gray-100);">
+                                <span>库存不足预警</span>
+                                <label class="switch"><input type="checkbox" id="sysStockAlert" checked><span class="slider"></span></label>
+                            </div>
+                            <div class="form-group" style="display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--gray-100);">
+                                <span>订单状态变更通知</span>
+                                <label class="switch"><input type="checkbox" id="sysOrderAlert" checked><span class="slider"></span></label>
+                            </div>
+                            <div class="form-group" style="display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--gray-100);">
+                                <span>生产完成通知</span>
+                                <label class="switch"><input type="checkbox" id="sysProductionAlert"><span class="slider"></span></label>
+                            </div>
+                            <div class="form-group" style="display: flex; align-items: center; justify-content: space-between; padding: 12px 0;">
+                                <span>每日报表推送</span>
+                                <label class="switch"><input type="checkbox" id="sysDailyReport"><span class="slider"></span></label>
                             </div>
                         </div>
-                        <table class="table">
-                            <thead><tr><th>用户名</th><th>姓名</th><th>角色</th><th>邮箱</th><th>状态</th><th>最后登录</th><th>操作</th></tr></thead>
-                            <tbody id="userTableBody">
-                                <tr><td>admin</td><td>管理员</td><td><span class="status-badge status-danger">超级管理员</span></td><td>admin@ruoyi.com</td><td><span class="status-badge status-success">启用</span></td><td>2026-05-12 09:30</td><td><button class="action-btn edit" onclick="editUser(1)">编辑</button></td></tr>
-                                <tr><td>manager</td><td>生产经理</td><td><span class="status-badge status-primary">生产主管</span></td><td>manager@ruoyi.com</td><td><span class="status-badge status-success">启用</span></td><td>2026-05-12 08:15</td><td><button class="action-btn edit" onclick="editUser(2)">编辑</button><button class="action-btn delete" onclick="toggleUserStatus(2)">禁用</button></td></tr>
-                                <tr><td>operator</td><td>操作员</td><td><span class="status-badge status-warning">普通用户</span></td><td>operator@ruoyi.com</td><td><span class="status-badge status-warning">禁用</span></td><td>2026-05-10 17:45</td><td><button class="action-btn edit" onclick="editUser(3)">编辑</button><button class="action-btn view" onclick="toggleUserStatus(3)">启用</button></td></tr>
-                            </tbody>
-                        </table>
                     </div>
+                    <div class="card">
+                        <div class="card-header"><h3 class="card-title">数据管理</h3></div>
+                        <div style="padding: 24px;">
+                            <div style="margin-bottom: 16px;">
+                                <p style="color: var(--gray-500); margin-bottom: 12px; font-size: 14px;">导出数据或清除演示数据。</p>
+                                <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                                    <button class="btn btn-outline" onclick="exportData()">导出数据</button>
+                                    <button class="btn btn-outline" onclick="importData()">导入数据</button>
+                                    <button class="btn btn-danger" onclick="clearDemoData()">清除演示数据</button>
+                                </div>
+                            </div>
+                            <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--gray-200);">
+                                <p style="color: var(--gray-500); margin-bottom: 12px; font-size: 14px;">系统信息</p>
+                                <p style="font-size: 14px;">物料数量：<span id="infoMaterialCount">0</span></p>
+                                <p style="font-size: 14px;">BOM数量：<span id="infoBomCount">0</span></p>
+                                <p style="font-size: 14px;">生产订单：<span id="infoProductionCount">0</span></p>
+                                <p style="font-size: 14px;">最后更新：<span id="infoLastUpdate">--</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
+                    <button class="btn btn-outline" onclick="resetSettings()">重置默认</button>
+                    <button class="btn btn-primary" onclick="saveSettings()">保存设置</button>
                 </div>
             </div>
         </div>
@@ -1167,14 +1128,6 @@
         }
 
         // Settings Functions
-        function switchSettingsTab(tabName, btnEl) {
-            document.querySelectorAll('.settings-tab-content').forEach(tab => tab.classList.add('hidden'));
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById('settings-tab-' + tabName).classList.remove('hidden');
-            btnEl.classList.add('active');
-            if (tabName === 'users') updateSettingsInfo();
-        }
-
         function loadSettings() {
             const settings = JSON.parse(localStorage.getItem('erpSettings') || '{}');
             if (settings.name) document.getElementById('sysName').value = settings.name;
@@ -1295,84 +1248,6 @@
                 showToast('演示数据已清除', 'success');
                 updateSettingsInfo();
             });
-        }
-
-        // User Management Functions
-        const users = [
-            { id: 1, username: 'admin', name: '管理员', role: '超级管理员', email: 'admin@ruoyi.com', status: 'active', lastLogin: '2026-05-12 09:30' },
-            { id: 2, username: 'manager', name: '生产经理', role: '生产主管', email: 'manager@ruoyi.com', status: 'active', lastLogin: '2026-05-12 08:15' },
-            { id: 3, username: 'operator', name: '操作员', role: '普通用户', email: 'operator@ruoyi.com', status: 'disabled', lastLogin: '2026-05-10 17:45' }
-        ];
-
-        function openUserModal(userId) {
-            const user = userId ? users.find(u => u.id === userId) : null;
-            const isEdit = !!user;
-            openModal(isEdit ? '编辑用户' : '新增用户', `
-                <div class="form-row">
-                    <div class="form-group"><label class="form-label">用户名 ${isEdit ? '(不可修改)' : '*'}</label><input class="form-input" id="uUsername" value="${isEdit ? user.username : ''}" ${isEdit ? 'disabled' : ''} placeholder="请输入用户名"></div>
-                    <div class="form-group"><label class="form-label">姓名 *</label><input class="form-input" id="uName" value="${isEdit ? user.name : ''}" placeholder="请输入姓名"></div>
-                </div>
-                ${!isEdit ? '<div class="form-group"><label class="form-label">密码 *</label><input class="form-input" id="uPassword" type="password" placeholder="请输入密码"></div>' : ''}
-                <div class="form-group"><label class="form-label">邮箱</label><input class="form-input" id="uEmail" type="email" value="${isEdit ? user.email : ''}" placeholder="请输入邮箱"></div>
-                <div class="form-group"><label class="form-label">角色 *</label>
-                    <select class="form-input" id="uRole">
-                        <option value="超级管理员" ${isEdit && user.role === '超级管理员' ? 'selected' : ''}>超级管理员</option>
-                        <option value="生产主管" ${isEdit && user.role === '生产主管' ? 'selected' : ''}>生产主管</option>
-                        <option value="普通用户" ${isEdit && user.role === '普通用户' ? 'selected' : ''}>普通用户</option>
-                    </select>
-                </div>
-                <div class="form-group"><label class="form-label">状态</label>
-                    <select class="form-input" id="uStatus">
-                        <option value="active" ${isEdit && user.status === 'active' ? 'selected' : ''}>启用</option>
-                        <option value="disabled" ${isEdit && user.status === 'disabled' ? 'selected' : ''}>禁用</option>
-                    </select>
-                </div>
-            `, () => {
-                const username = document.getElementById('uUsername').value;
-                const name = document.getElementById('uName').value;
-                const role = document.getElementById('uRole').value;
-                if (!username || !name) { showToast('请填写必填项', 'error'); return; }
-                if (isEdit) {
-                    user.name = name;
-                    user.role = role;
-                    user.email = document.getElementById('uEmail').value;
-                    user.status = document.getElementById('uStatus').value;
-                    showToast('用户信息已更新', 'success');
-                } else {
-                    const password = document.getElementById('uPassword').value;
-                    if (!password) { showToast('请输入密码', 'error'); return; }
-                    const newId = users.length + 1;
-                    users.push({ id: newId, username, name, role, email: document.getElementById('uEmail').value, status: document.getElementById('uStatus').value, lastLogin: '--' });
-                    showToast('用户[' + username + ']创建成功', 'success');
-                }
-                refreshUserTable();
-            });
-        }
-
-        function editUser(id) {
-            openUserModal(id);
-        }
-
-        function toggleUserStatus(id) {
-            const user = users.find(u => u.id === id);
-            if (!user || user.username === 'admin') { showToast('无法修改超级管理员状态', 'error'); return; }
-            user.status = user.status === 'active' ? 'disabled' : 'active';
-            const action = user.status === 'active' ? '启用' : '禁用';
-            showToast('用户[' + user.username + ']' + action + '成功', 'success');
-            refreshUserTable();
-        }
-
-        function refreshUserTable() {
-            const tbody = document.getElementById('userTableBody');
-            const statusMap = { active: { text: '启用', class: 'success' }, disabled: { text: '禁用', class: 'warning' } };
-            const roleClassMap = { '超级管理员': 'status-danger', '生产主管': 'status-primary', '普通用户': 'status-warning' };
-            tbody.innerHTML = users.map(u => {
-                const st = statusMap[u.status];
-                const toggleBtn = u.username === 'admin' ? '' : (u.status === 'active' 
-                    ? '<button class="action-btn delete" onclick="toggleUserStatus(' + u.id + ')">禁用</button>' 
-                    : '<button class="action-btn view" onclick="toggleUserStatus(' + u.id + ')">启用</button>');
-                return '<tr><td>' + u.username + '</td><td>' + u.name + '</td><td><span class="status-badge ' + roleClassMap[u.role] + '">' + u.role + '</span></td><td>' + u.email + '</td><td><span class="status-badge status-' + st.class + '">' + st.text + '</span></td><td>' + u.lastLogin + '</td><td><button class="action-btn edit" onclick="editUser(' + u.id + ')">编辑</button>' + toggleBtn + '</td></tr>';
-            }).join('');
         }
 
         document.addEventListener('DOMContentLoaded', () => {
